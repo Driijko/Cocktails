@@ -45,7 +45,6 @@ const data = [
   }
 ]
 
-
 app.get('/cocktailList', (req, res)=>{
   res.send(data);
 })
