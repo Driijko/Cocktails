@@ -18,15 +18,39 @@ app.listen(port,()=> {
 //   res.send('Hello World');
 // })
 
-app.get('/cocktailList', (req, res)=>{
-  res.send({
+const data = [
+  {
     name: 'Cosmopolitan',
     ingredients: [
       'juice',
       'alchohol',
       'olives?'
-    ]});
+    ]
+  },
+  {
+    name: 'Dark and Stormy',
+    ingredients: [
+      'lime',
+      'ice',
+      'ginger beer',
+      'dark rum'
+    ]
+  }
+]
+
+app.get('/cocktailList', (req, res)=>{
+  res.send(data);
 })
+
+// app.get('/cocktailList', (req, res)=>{
+//   res.send({
+//     name: 'Cosmopolitan',
+//     ingredients: [
+//       'juice',
+//       'alchohol',
+//       'olives?'
+//     ]});
+// })
 
 // app.get('/hello/:id', function (req, res, next) {
 //   res.json({msg: 'Hello world, we are CORS-enabled!'});
