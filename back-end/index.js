@@ -35,8 +35,16 @@ const data = [
       'ginger beer',
       'dark rum'
     ]
+  }, 
+  {
+    name: "Manhattan",
+    ingredients: [
+      'something',
+      'something else'
+    ]
   }
 ]
+
 
 app.get('/cocktailList', (req, res)=>{
   res.send(data);
