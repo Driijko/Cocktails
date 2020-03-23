@@ -26,40 +26,37 @@ const data = [
   }
 ];
 
-app.get('/cocktailList', (req, res)=>{
+app.get('/cocktailList', async (req, res)=> {
   // Step 0: Iterate through each type of cocktail
   for (let i = 0 ; i < data.length ; i++) {
 
     // Step 1: Make a bunch of API calls, one for each cocktail
-    axios.get(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${data[i].name}`)
+    const drinkData = await axios.get(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${data[i].name}`);
 
-    // Step 2: Receive data
-    .then(response => {
-      // console.log(response.data.drinks[0].strIngredient1);
-      // for(let j = 1 ; j < 16 ; j++ ) {
-
-      //   let currentIngredient = `strIngredient${j}`;
-
-      //   data[i].ingredients[j - 1] = response.data.drinks[0][currentIngredient];
-      // }
+    // Step 2: Iterate through each ingredient
+    // In the database, each ingredient is listed as a property of the form 'strIngredient1', 'strIngredient2', etc
+    // There is a max of 15 ingredients per drink.
+    for(let j = 1 ; j < 16 ; j++ ) {
 
       // Step 3: Parse data
-      data[i].ingredients[0] = response.data.drinks[0].strIngredient1;
-      if (!(response.data.drinks[0].strIngredient2 === null)) {
-        data[i].ingredients[1] = response.data.drinks[0].strIngredient2;
-      }
+      // For a given type of drink, there can be multiple versions.
+      // The 'drinks' property is an array, 
+      // each element of which contains a given version of a type of drink, like margaritas.
+      // We always grab the first version as a "default" version, hence using the index '0' below.
+      let currentIngredient = drinkData.data.drinks[0][`strIngredient${j}`];
 
-
-    })
-    .then(() => {
-      if (i === data.length - 1) {
-        console.log(data);
-        res.send(data);
+      // Step 4: Update our local data structure.
+      // If a given drink has less than 15 ingredients, there will be a series of null 'strIngredient' properties.
+      // Once we reach a 'null' ingredient, we break from the loop. 
+      // Otherwise, we add it to our data object.
+      if (currentIngredient !== null) {
+        data[i].ingredients.push(currentIngredient); 
       }
+      else break;
     }
-    )
-    .catch(error => {
-      console.log(error);
-    });
   }
-})
+
+  // Step 5: Send our data to our front-end.
+  res.send(data);
+
+});
