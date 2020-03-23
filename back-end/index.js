@@ -14,21 +14,39 @@ app.listen(port,()=> {
   console.log('listen port 8000');
 })
 
-// Here we set up the data structure that we will eventually send to the front end.
-const data = [
-  {
-    name: "margarita",
-    ingredients: []
-  }, 
-  {
-    name: "cosmopolitan",
-    ingredients: []
-  }
-];
+// For now we just hard code the set of cocktail names we will include for our app.
+const drinkNames = [
+  'bloody mary',
+  'cosmopolitan',
+  'daiquiri',
+  'dark and stormy',
+  'mai tai',
+  'manhattan',
+  'margarita',
+  'martini',
+  'mint julep',
+  'mojito',
+  'moscow mule',
+  'negroni',
+  'old fashioned',
+  'pina colada',
+  'whiskey sour',
+  'white russian'
+]
+
+// This is the data structure we will eventually use to send to our front end, but for now we'll keep it empty.
+const data = [];
 
 app.get('/cocktailList', async (req, res)=> {
+  
   // Step 0: Iterate through each type of cocktail
-  for (let i = 0 ; i < data.length ; i++) {
+  for (let i = 0 ; i < drinkNames.length ; i++) {
+
+    // Let's first make sure our local data structure is set up correctly to receive the data it needs.
+    data[i] = {
+      name: drinkNames[i],
+      ingredients: []
+    }
 
     // Step 1: Make a bunch of API calls, one for each cocktail
     const drinkData = await axios.get(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${data[i].name}`);
