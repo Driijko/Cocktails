@@ -9,8 +9,7 @@ const app = express();
 app.use(cors());
 
 // Set up our server
-const port = 8000;
-app.listen(port,()=> {
+app.listen(process.env.PORT || 8000,()=> {
   console.log('listen port 8000');
 })
 
